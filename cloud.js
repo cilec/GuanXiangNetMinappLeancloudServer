@@ -1,4 +1,5 @@
 var AV = require("leanengine");
+let Request = require("request");
 
 /**
  * 一个简单的云代码方法
@@ -7,19 +8,29 @@ AV.Cloud.define("hello", function(request) {
   return "Hello world!";
 });
 AV.Cloud.define("getScanCode", function(request) {
-  let options = {
-    method: "POST",
-    mode: "cors",
-    cache: "default"
-  };
-  return fetch(
+  Request(
     `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${
       process.env.WEIXIN_APPID
     }&secret=${process.env.WEIXIN_APPSECRET}`,
-    options
-  )
-    .then(res => {
-      return res;
-    })
-    .catch(err => console.log(err));
+    (error, response, body) => {
+      if (!error && response.statusCode == 200) {
+        console.log(JSON.parse(body)); // 打印google首页
+        Request.post(
+          `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${
+            JSON.parse(body).access_token
+          }`,
+          {
+            form: {
+              page: "pages/index/index",
+              scene: "123",
+              auto_color: true
+            }
+          },
+          (error, response, body) => {
+            console.log("二维码", body);
+          }
+        );
+      }
+    }
+  );
 });
