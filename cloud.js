@@ -20,7 +20,7 @@ AV.Cloud.define("getScanCode", function(request) {
             JSON.parse(body).access_token
           }`,
           {
-            form: JSON.stringify({
+            form: JSON.stringify({  //这里是个巨坑，微信不支持表单提交，必须转成json字符串
               path: "pages/index/index",
               auto_color: true
             })
