@@ -6,3 +6,6 @@ var AV = require('leanengine');
 AV.Cloud.define('hello', function(request) {
   return 'Hello world!';
 });
+AV.Cloud.define('getScanCode',function(request){
+  return 'getScanCode'
+})
