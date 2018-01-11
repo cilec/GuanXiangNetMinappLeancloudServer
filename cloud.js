@@ -16,15 +16,14 @@ AV.Cloud.define("getScanCode", function(request) {
       if (!error && response.statusCode == 200) {
         console.log(JSON.parse(body)); // 打印google首页
         Request.post(
-          `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${
+          `https://api.weixin.qq.com/wxa/getwxacode?access_token=${
             JSON.parse(body).access_token
           }`,
           {
-            form: {
-              page: "pages/index/index",
-              scene: "123",
+            form: JSON.stringify({
+              path: "pages/index/index",
               auto_color: true
-            }
+            })
           },
           (error, response, body) => {
             console.log("二维码", body);
