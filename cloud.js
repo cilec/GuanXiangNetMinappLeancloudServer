@@ -1,3 +1,5 @@
+let { Buffer } = require("buffer");
+
 var AV = require("leanengine");
 let Request = require("request");
 let fs = require("fs");
@@ -38,10 +40,10 @@ AV.Cloud.define("getScanCode", function(request) {
           },
           (error, response, body) => {
             if (!error && response.statusCode == 200) {
-              console.log("二维码");
-              base64Img = body.toString("base64");
-              console.log("base64Img", base64Img);
-              resolve(body);
+              console.log("二维码", body);
+              let imgdata = new Buffer(body,"base64")
+              let file = new AV.File("test.png", imgdata);
+              resolve(file.save());
             } else {
               throw error;
             }
@@ -51,9 +53,7 @@ AV.Cloud.define("getScanCode", function(request) {
     })
     .then(res => {
       console.log(res);
-      let base64Img = res.toString("base64");
-      console.log("base64Img", base64Img);
-      return base64Img;
+      return res;
     })
     .catch(err => console.log(err));
 });
