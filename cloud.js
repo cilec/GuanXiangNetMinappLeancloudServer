@@ -28,10 +28,11 @@ AV.Cloud.define("getScanCode", function(request) {
   })
     .then(res => {
       return new Promise(resolve => {
-        console.log(res);
+        // console.log(res);
         Request.post(
           `https://api.weixin.qq.com/wxa/getwxacode?access_token=${res}`,
           {
+            encoding: null, //这里要将编码格式设为空才会返回二进制流,不然默认会对返回数据用utf-8的编码方式进行转码
             form: JSON.stringify({
               //这里是个巨坑，微信不支持表单提交，必须转成json字符串
               path: "pages/index/index",
@@ -40,9 +41,10 @@ AV.Cloud.define("getScanCode", function(request) {
           },
           (error, response, body) => {
             if (!error && response.statusCode == 200) {
-              console.log("二维码", body);
-              let imgdata = new Buffer(body,"base64")
-              let file = new AV.File("test.png", imgdata);
+              // console.log("二维码", body);
+              // let imgdata = new Buffer(body);
+              let file = new AV.File("test.png", body);
+              console.log(body);
               resolve(file.save());
             } else {
               throw error;
