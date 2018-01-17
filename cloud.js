@@ -10,6 +10,7 @@ AV.Cloud.define("hello", function(request) {
   return "Hello world!";
 });
 AV.Cloud.define("getScanCode", function(request) {
+  let id = Request.params.id;
   return new Promise(function(resolve) {
     Request(
       `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${
@@ -35,7 +36,7 @@ AV.Cloud.define("getScanCode", function(request) {
             encoding: null, //这里要将编码格式设为空才会返回二进制流,不然默认会对返回数据用utf-8的编码方式进行转码
             form: JSON.stringify({
               //这里是个巨坑，微信不支持表单提交，必须转成json字符串
-              path: "pages/index/index",
+              path: "pages/index/index?id="+id,
               auto_color: true
             })
           },
