@@ -10,7 +10,7 @@ AV.Cloud.define("hello", function(request) {
   return "Hello world!";
 });
 AV.Cloud.define("getScanCode", function(request) {
-  let id = Request.params.id;
+  let id = request.params.id;
   return new Promise(function(resolve) {
     Request(
       `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${
