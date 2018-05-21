@@ -1,15 +1,16 @@
-let { Buffer } = require("buffer");
+let { Buffer } = require('buffer');
 
-var AV = require("leanengine");
-let Request = require("request");
-let fs = require("fs");
+var AV = require('leanengine');
+let Request = require('request');
+
 /**
  * 一个简单的云代码方法
  */
-AV.Cloud.define("hello", function(request) {
-  return "Hello world!";
+AV.Cloud.define('hello', function(request) {
+  return 'Hello world!';
 });
-AV.Cloud.define("getScanCode", function(request) {
+//获取小程序码
+AV.Cloud.define('getScanCode', function(request) {
   let id = request.params.id;
   return new Promise(function(resolve) {
     Request(
@@ -24,7 +25,7 @@ AV.Cloud.define("getScanCode", function(request) {
         } else {
           throw error;
         }
-      }
+      },
     );
   })
     .then(res => {
@@ -36,21 +37,21 @@ AV.Cloud.define("getScanCode", function(request) {
             encoding: null, //这里要将编码格式设为空才会返回二进制流,不然默认会对返回数据用utf-8的编码方式进行转码
             form: JSON.stringify({
               //这里是个巨坑，微信不支持表单提交，必须转成json字符串
-              path: "pages/details/details?id="+id,
-              auto_color: true
-            })
+              path: 'pages/details/details?id=' + id,
+              auto_color: true,
+            }),
           },
           (error, response, body) => {
             if (!error && response.statusCode == 200) {
               // console.log("二维码", body);
               // let imgdata = new Buffer(body);
-              let file = new AV.File("test.png", body);
+              let file = new AV.File('test.png', body);
               console.log(body);
               resolve(file.save());
             } else {
               throw error;
             }
-          }
+          },
         );
       });
     })
@@ -59,4 +60,15 @@ AV.Cloud.define("getScanCode", function(request) {
       return res;
     })
     .catch(err => console.log(err));
+});
+AV.Cloud.define('order', (req, res) => {
+  const user = req.currentUser; //获取当前用户
+  if (!user) {
+    return res.error(new Error('用户未登录'));
+  }
+  const authData = user.get('authData'); //leancloud自动帮我们加的鉴别参数
+  if (!authData || !authData.lc_weapp) {
+    return response.error(new Error('当前用户不是小程序用户'));
+  }
+  
 });
