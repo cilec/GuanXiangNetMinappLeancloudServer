@@ -1,7 +1,10 @@
-let { Buffer } = require('buffer');
+let { Buffer } = require('buffer'); //处理二维码用
 
 var AV = require('leanengine');
 let Request = require('request');
+
+const uuid = require('uuid/v4');
+const Order = require('./order');
 
 /**
  * 一个简单的云代码方法
@@ -70,5 +73,25 @@ AV.Cloud.define('order', (req, res) => {
   if (!authData || !authData.lc_weapp) {
     return response.error(new Error('当前用户不是小程序用户'));
   }
-  
+  const order = new Order();
+  //填写必要的订单参数
+  order.tradeId = uuid().replace(/-/g, '');
+  order.status = 'INIT';
+  order.user = user;
+  order.productDescription = '观象网络--小程序支付测试';
+  order.amount = 1;
+  order.ip = req.meta.remoteAddress;
+  //匹配下ip，看是否是本地测试
+  if (!(order.ip && /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(order.ip))) {
+    order.ip = '127.0.0.1';
+  }
+  order.tradeType='JSAPI'//微信规定，没得改
+  const acl=new AV.ACl();//设定订单表的访问权限，创建订单的用户可以读，所有用户不能写
+  acl.setPublicReadAccess(false);
+  acl.setPublicWriteAccess(false);
+  acl.setReadAccess(user, true);
+  acl.setWriteAccess(user, false);
+  order.setACL(acl);
+
+  // order.place().then()
 });
