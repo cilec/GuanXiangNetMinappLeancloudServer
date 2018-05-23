@@ -22,6 +22,7 @@ router.post('/pay-callback', async function(ctx) {
   let res = ctx.res;
   wxpay.useWXCallback((msg, req, res, next) => {
     validateSign(msg);
+    console.log('msg', msg);
     const {
       result_code,
       err_code,
