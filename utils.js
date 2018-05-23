@@ -1,12 +1,12 @@
 const wxpay = require('./wxpay');
 const validateSign = res => {
-  const sign = wxpay.sign(results);
+  const sign = wxpay.sign(res);
   if (sign !== results.sign) {
     const error = new Error('微信返回参数签名结果不正确');
     error.code = 'INVALID_RESULT_SIGN';
     throw error;
   }
-  return results;
+  return res;
 };
 
 const handleError = res => {
