@@ -69,7 +69,8 @@ class Order extends AV.Object {
     return new Promise((resolve, reject) => {
       //https://github.com/tvrcgo/weixin-pay   wxpay使用说明
       //wxpay.js里已做初始化
-      wxpay.createUnifidOrder(
+
+      wxpay.createUnifiedOrder(
         {
           openid: this.user.get('authData').lc_weapp.openid, //leancloud自动帮你读取openid
           body: this.productDescription, //商品描述，可以自定义
