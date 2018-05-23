@@ -39,6 +39,7 @@ router.post('/pay-callback', async function(ctx) {
       .then(order => {
         if (!order) throw new Error(`找不到订单${out_trade_no}`);
         if (order.status === 'SUCCESS') return;
+        console.table(msg, req, res);
         return order.save(
           {
             status: result_code,
