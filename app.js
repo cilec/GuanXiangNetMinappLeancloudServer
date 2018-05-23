@@ -9,6 +9,7 @@ const views = require('koa-views');
 const statics = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 
+const weixin=require('./routes/weixin')
 // 加载云函数定义，你可以将云函数拆分到多个文件方便管理，但需要在主文件中加载它们
 require('./cloud');
 
@@ -27,7 +28,7 @@ app.use(router.routes());
 app.use(AV.koa());
 
 app.use(bodyParser());
-
+app.use('/weixin',weixin)
 router.get('/', async function(ctx) {
   ctx.state.currentTime = new Date();
   await ctx.render('./index.ejs');

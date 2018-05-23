@@ -64,8 +64,11 @@ AV.Cloud.define('getScanCode', function(request) {
     })
     .catch(err => console.log(err));
 });
+
+//下单函数
 AV.Cloud.define('order', (req, res) => {
   const user = req.currentUser; //获取当前用户
+  // console.log(req.params,req.meta.remoteAddress);
   if (!user) {
     return res.error(new Error('用户未登录'));
   }
@@ -78,14 +81,17 @@ AV.Cloud.define('order', (req, res) => {
   order.tradeId = uuid().replace(/-/g, '');
   order.status = 'INIT';
   order.user = user;
-  order.productDescription = '观象网络--小程序支付测试';
-  order.amount = 1;
+  order.productDescription = req.params.productDescription;
+  order.amount = req.params.price;
   order.ip = req.meta.remoteAddress;
   //匹配下ip，看是否是本地测试
   if (!(order.ip && /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(order.ip))) {
     order.ip = '127.0.0.1';
   }
   order.tradeType = 'JSAPI'; //微信规定，没得改
+  //做了个pointer把article给存进去
+  let article = AV.Object.createWithoutData('article', req.params.articleId);
+  order.article = article;
   const acl = new AV.ACl(); //设定订单表的访问权限，创建订单的用户可以读，所有用户不能写
   acl.setPublicReadAccess(false);
   acl.setPublicWriteAccess(false);
