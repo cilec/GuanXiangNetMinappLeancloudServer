@@ -119,6 +119,6 @@ AV.Cloud.define('order', (req, res) => {
     })
     .then(error => {
       console.error(error);
-      response.error(error);
+      res.error(error);
     });
 });
