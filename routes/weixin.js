@@ -1,6 +1,6 @@
 'use strict';
 const Router = require('koa-router');
-const Order = reuqire('../order');
+const Order = require('../order');
 const router = new Router();
 const AV = require('leanengine');
 const wxpay = require('../wxpay');
