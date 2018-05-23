@@ -31,7 +31,12 @@ class Order extends AV.Object {
   set productDescription(value) {
     this.set('productDescription', value);
   }
-
+  get article() {
+    return this.get('article');
+  }
+  set article(value) {
+    this.set('article', value);
+  }
   get status() {
     return this.get('status');
   }
