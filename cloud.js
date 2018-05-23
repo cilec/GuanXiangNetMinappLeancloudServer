@@ -92,7 +92,7 @@ AV.Cloud.define('order', (req, res) => {
   //做了个pointer把article给存进去
   let article = AV.Object.createWithoutData('article', req.params.articleId);
   order.article = article;
-  const acl = new AV.ACl(); //设定订单表的访问权限，创建订单的用户可以读，所有用户不能写
+  const acl = new AV.ACL(); //设定订单表的访问权限，创建订单的用户可以读，所有用户不能写
   acl.setPublicReadAccess(false);
   acl.setPublicWriteAccess(false);
   acl.setReadAccess(user, true);
