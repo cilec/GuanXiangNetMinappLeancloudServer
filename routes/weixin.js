@@ -39,6 +39,7 @@ const parseXML = xml => {
 // 处理微信支付回传notify
 // 如果收到消息要跟微信回传是否接收到
 const handleNotify = async ctx => {
+  consol.log('ctx.req', ctx.req);
   const xml = await rawbody(ctx.req, {
     length: ctx.request.length,
     limit: '1mb',
