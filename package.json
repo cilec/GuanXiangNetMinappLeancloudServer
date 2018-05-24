@@ -18,9 +18,11 @@
     "koa-views": "^6.0.2",
     "leancloud-storage": "^3.0.2",
     "leanengine": "^3.0.0",
+    "rawbody": "^1.0.2",
     "request": "^2.83.0",
     "uuid": "^3.2.1",
-    "weixin-pay": "^1.1.7"
+    "weixin-pay": "^1.1.7",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

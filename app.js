@@ -29,10 +29,10 @@ app.use(AV.koa());
 
 app.use(bodyParser());
 
-router.get('/', async function(ctx) {
-  ctx.state.currentTime = new Date();
-  await ctx.render('./index.ejs');
-});
+// router.get('/', async function(ctx) {
+//   ctx.state.currentTime = new Date();
+//   await ctx.render('./index.ejs');
+// });
 
 // 可以将一类的路由单独保存在一个文件中
 // app.use(require('./routes/todos').routes());
