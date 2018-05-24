@@ -7,7 +7,7 @@ const wxpay = require('../wxpay');
 const { validateSign } = require('../utils');
 
 const xml2js = require('xml2js');
-const rawbody = require('rawbody');
+const rawbody = require('raw-body');
 
 const format = '___-_-_ _:_:__';
 const formatTime = time =>
@@ -39,13 +39,12 @@ const parseXML = xml => {
 // 处理微信支付回传notify
 // 如果收到消息要跟微信回传是否接收到
 const handleNotify = async ctx => {
-  consol.log('ctx.req', ctx.req);
   const xml = await rawbody(ctx.req, {
     length: ctx.request.length,
     limit: '1mb',
     encoding: ctx.request.charset || 'utf-8',
-  });
-
+  }).catch(error => console.log('error', error));
+  // console.log('xml', xml);
   const res = await parseXML(xml); // 解析xml
   const {
     result_code,
@@ -56,7 +55,7 @@ const handleNotify = async ctx => {
     transaction_id,
     bank_type,
   } = res;
-  console.log('res', res);
+  // console.log('res', res);
   // 如果都为SUCCESS代表支付成功
   // ... 这里是写入数据库的相关操作
   await new AV.Query(Order)
@@ -65,6 +64,7 @@ const handleNotify = async ctx => {
       useMasterKey: true,
     })
     .then(order => {
+      console.log(order);
       if (!order) throw new Error(`找不到订单${out_trade_no}`);
       if (order.status === 'SUCCESS') return;
       return order.save(
@@ -90,6 +90,7 @@ const handleNotify = async ctx => {
       `);
     })
     .catch(error => {
+      console.log(error);
       // 如果支付失败，也回传微信
       ctx.status = 400;
       ctx.type = 'application/xml';
