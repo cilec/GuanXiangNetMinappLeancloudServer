@@ -16,7 +16,7 @@ const formatTime = time =>
       .replace(/_/g, ''),
   );
 
-router.all('/pay-callback', async function(ctx) {
+router.post('/pay-callback', async function(ctx) {
   const msg = ctx.request.body;
   let req = ctx.req;
   let res = ctx.res;
