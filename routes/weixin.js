@@ -9,7 +9,6 @@ const { validateSign } = require('../utils');
 const xml2js = require('xml2js');
 const rawbody = require('rawbody');
 
-
 const format = '___-_-_ _:_:__';
 const formatTime = time =>
   new Date(
@@ -78,40 +77,29 @@ const handleNotify = async ctx => {
         },
         { useMasterKey: true },
       );
-    }).then(()=>{
-      return ctx.body = `<xml>
-      <return_code><![CDATA[SUCCESS]]></return_code>
-      <return_msg><![CDATA[OK]]></return_msg>
-    </xml>
-    `
-    }).catch(error=>{
-      ctx.status = 400
-      ctx.type = 'application/xml'
-      ctx.body = `<xml>
-        <return_code><![CDATA[FAIL]]></return_code>
-        <return_msg><![CDATA[OK]]></return_msg>
-      </xml>
-      `
-    });
-  // 开始回传微信
-  ctx.type = 'application/xml'; // 指定发送的请求类型是xml
-  // 回传微信，告诉已经收到
-  return (ctx.body = `<xml>
+    })
+    .then(() => {
+      // 开始回传微信
+      ctx.type = 'application/xml'; // 指定发送的请求类型是xml
+      // 回传微信，告诉已经收到
+      return (ctx.body = `<xml>
         <return_code><![CDATA[SUCCESS]]></return_code>
         <return_msg><![CDATA[OK]]></return_msg>
       </xml>
       `);
-
-  // 如果支付失败，也回传微信
-  ctx.status = 400;
-  ctx.type = 'application/xml';
-  ctx.body = `<xml>
+    })
+    .catch(error => {
+      // 如果支付失败，也回传微信
+      ctx.status = 400;
+      ctx.type = 'application/xml';
+      ctx.body = `<xml>
     <return_code><![CDATA[FAIL]]></return_code>
     <return_msg><![CDATA[OK]]></return_msg>
   </xml>
   `;
+    });
 };
-router.post('/weixin/pay-callback',handleNotify)
+router.post('/weixin/pay-callback', handleNotify);
 // router.post('/weixin/pay-callback', async function(ctx) {
 //   const msg = ctx.request.body;
 //   let req = ctx.req;
