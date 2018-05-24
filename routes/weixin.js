@@ -64,7 +64,7 @@ const handleNotify = async ctx => {
       useMasterKey: true,
     })
     .then(order => {
-      console.log(order);
+      // console.log(order);
       if (!order) throw new Error(`找不到订单${out_trade_no}`);
       if (order.status === 'SUCCESS') return;
       return order.save(
@@ -90,7 +90,7 @@ const handleNotify = async ctx => {
       `);
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
       // 如果支付失败，也回传微信
       ctx.status = 400;
       ctx.type = 'application/xml';
