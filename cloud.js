@@ -50,7 +50,7 @@ AV.Cloud.define('getScanCode', function(request) {
               // let imgdata = new Buffer(body);
               let file = new AV.File('test.png', body);
               console.log(body);
-              resolve(file.save());
+              resolve(body);
             } else {
               throw error;
             }
