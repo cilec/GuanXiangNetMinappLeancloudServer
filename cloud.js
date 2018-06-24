@@ -50,8 +50,9 @@ AV.Cloud.define('getScanCode', function(request) {
               // let imgdata = new Buffer(body);
               let file = new AV.File('test.png', body);
               console.log(body);
+              
               //直接将base64返回给小程序
-              resolve(body);
+              resolve(body.toString('base64'));
             } else {
               throw error;
             }
