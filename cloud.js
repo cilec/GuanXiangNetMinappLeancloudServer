@@ -50,9 +50,9 @@ AV.Cloud.define('getScanCode', function(request) {
               // let imgdata = new Buffer(body);
               let file = new AV.File('test.png', body);
               console.log(body);
-              
-              //直接将base64返回给小程序
-              resolve(body.toString('base64'));
+              //这种方式可以直接将小程序码的base64给返回，但是前端无法canvas绘制
+              //resolve(body.toString('base64'))
+              resolve(file.save());
             } else {
               throw error;
             }
