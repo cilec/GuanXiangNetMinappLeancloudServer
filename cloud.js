@@ -101,26 +101,22 @@ AV.Cloud.define('order', (req, res) => {
   acl.setWriteAccess(user, false);
   order.setACL(acl);
 
-  order
-    .place()
-    .then(() => {
-      console.log(
-        `预订单创建成功：订单号 [${order.tradeId}] prepayId [${
-          order.prepayId
-        }]`,
-      );
-      const payload = {
-        appId: process.env.WEIXIN_APPID,
-        timeStamp: String(Math.floor(Date.now() / 1000)),
-        package: `prepay_id=${order.prepayId}`,
-        signType: 'MD5',
-        nonceStr: String(Math.random()),
-      };
-      payload.paySign = wxpay.sign(payload);
-      res.success(payload);
-    })
-    .then(error => {
-      console.error(error);
-      res.error(error);
-    });
+  order.place().then(() => {
+    console.log(
+      `预订单创建成功：订单号 [${order.tradeId}] prepayId [${order.prepayId}]`,
+    );
+    const payload = {
+      appId: process.env.WEIXIN_APPID,
+      timeStamp: String(Math.floor(Date.now() / 1000)),
+      package: `prepay_id=${order.prepayId}`,
+      signType: 'MD5',
+      nonceStr: String(Math.random()),
+    };
+    payload.paySign = wxpay.sign(payload);
+    return Promise.resolve(payload);
+  });
+  // .then(error => {
+  //   console.error(error);
+  //   res.error(error);
+  // });
 });
